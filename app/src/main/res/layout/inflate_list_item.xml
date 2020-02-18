@@ -1,0 +1,26 @@
+<LinearLayout
+    android:id="@+id/linear"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:shimmer="http://schemas.android.com/tools"
+    android:background="@drawable/roundedbuttondborder"
+    shimmer:ignore="RedundantNamespace">
+
+    <ImageView
+    android:layout_width="@dimen/_100sdp"
+    android:layout_height="@dimen/_150sdp"
+    android:id="@+id/imgCharacter"
+    />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvCharactername"
+        android:textAlignment="center"
+        android:text="123sdjas"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
+        />
+    </LinearLayout>
+

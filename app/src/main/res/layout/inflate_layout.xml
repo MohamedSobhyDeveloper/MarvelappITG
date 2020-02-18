@@ -1,0 +1,29 @@
+<LinearLayout
+    android:id="@+id/linear"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_marginTop="@dimen/_10sdp"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:shimmer="http://schemas.android.com/tools"
+    shimmer:ignore="RedundantNamespace">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvInflatername"
+        android:text="Comics"
+        android:textColor="@color/red"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycer_inflate"
+        android:layout_marginTop="@dimen/_10sdp"
+        />
+
+
+
+    </LinearLayout>
+
