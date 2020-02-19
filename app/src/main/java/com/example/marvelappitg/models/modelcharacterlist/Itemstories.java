@@ -1,5 +1,5 @@
 
-package com.example.marvelappitg.models;
+package com.example.marvelappitg.models.modelcharacterlist;
 
 import android.os.Parcel;
 import android.os.Parcelable;

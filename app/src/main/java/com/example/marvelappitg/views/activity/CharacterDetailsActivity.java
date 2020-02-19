@@ -1,4 +1,4 @@
-package com.example.marvelappitg.views;
+package com.example.marvelappitg.views.activity;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,15 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.marvelappitg.R;
-import com.example.marvelappitg.adapters.CharacterListAdapter;
 import com.example.marvelappitg.adapters.InflateListAdapter;
-import com.example.marvelappitg.models.Comics;
-import com.example.marvelappitg.models.Events;
-import com.example.marvelappitg.models.Result;
-import com.example.marvelappitg.models.Series;
-import com.example.marvelappitg.models.Stories;
-
-import java.util.List;
+import com.example.marvelappitg.models.modelcharacterlist.Comics;
+import com.example.marvelappitg.models.modelcharacterlist.Events;
+import com.example.marvelappitg.models.modelcharacterlist.Result;
+import com.example.marvelappitg.models.modelcharacterlist.Series;
+import com.example.marvelappitg.models.modelcharacterlist.Stories;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

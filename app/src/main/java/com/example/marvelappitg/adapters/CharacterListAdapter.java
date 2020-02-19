@@ -13,14 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.marvelappitg.R;
-import com.example.marvelappitg.models.Result;
-import com.example.marvelappitg.views.CharacterDetailsActivity;
-import com.facebook.shimmer.ShimmerFrameLayout;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.example.marvelappitg.models.modelcharacterlist.Result;
+import com.example.marvelappitg.views.activity.CharacterDetailsActivity;
 
 import java.util.List;
 

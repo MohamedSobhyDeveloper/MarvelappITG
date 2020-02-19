@@ -1,19 +1,21 @@
-package com.example.marvelappitg.views;
+package com.example.marvelappitg.views.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.marvelappitg.R;
 import com.example.marvelappitg.adapters.CharacterListAdapter;
-import com.example.marvelappitg.models.Data;
-import com.example.marvelappitg.models.ModelCharacterList;
-import com.example.marvelappitg.models.Result;
+import com.example.marvelappitg.models.modelcharacterlist.Data;
+import com.example.marvelappitg.models.modelcharacterlist.ModelCharacterList;
+import com.example.marvelappitg.models.modelcharacterlist.Result;
 import com.example.marvelappitg.retrofitConfig.HandelCalls;
 import com.example.marvelappitg.retrofitConfig.HandleRetrofitResp;
 import com.example.marvelappitg.utlitites.DataEnum;
@@ -26,12 +28,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity implements HandleRetrofitResp {
+public class SearchActivity extends AppCompatActivity implements HandleRetrofitResp {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.searchBtn)
-    ImageView searchBtn;
+    @BindView(R.id.searchword)
+    EditText searchword;
+    @BindView(R.id.cancelbtn)
+    TextView cancelbtn;
     @BindView(R.id.character_list_recycler)
     RecyclerView characterListRecycler;
     CharacterListAdapter characterListAdapter;
@@ -43,7 +45,7 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
         characterListRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -56,7 +58,7 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
 
                     if (loading) {
                         if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                            callCharacterList(offset);
+                            callCharacterList(offset,searchword.getText().toString());
 
                             loading = false;
                         }
@@ -66,22 +68,41 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
 
         });
 
-        callCharacterList(offset);
 
+        searchword.addTextChangedListener(new TextWatcher() {
 
+            @Override
+            public void afterTextChanged(Editable s) {}
 
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if(s.length()>1){
+                    offset=0;
+                    callCharacterList(offset,searchword.getText().toString());
+
+                }
+
+            }
+        });
     }
 
-    private void callCharacterList(int offset) {
-        if (offset==0){
+    private void callCharacterList(int offset, String searchword) {
+        if (offset==0) {
             Long tsLong = System.currentTimeMillis() / 1000;
             String ts = tsLong.toString();
             HashMap<String, String> meMap = new HashMap<>();
             meMap.put("apikey", "f2d587b7acc1cf9ae8d86fdcde51f394");
             meMap.put("ts", ts);
             meMap.put("hash", HelpMe.md5(ts + "b5abf01b39744e74f81d1079fa04a3b3a51c9b08" + "f2d587b7acc1cf9ae8d86fdcde51f394"));
-            meMap.put("offset",offset+"");
-            HandelCalls.getInstance(this).call(DataEnum.CallCharacterList.name(), meMap,"", true, this);
+            meMap.put("offset", offset + "");
+            meMap.put("nameStartsWith", searchword);
+            HandelCalls.getInstance(this).call(DataEnum.CallCharacterSearch.name(), meMap, "", true, this);
         }else {
             Long tsLong = System.currentTimeMillis() / 1000;
             String ts = tsLong.toString();
@@ -89,42 +110,31 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
             meMap.put("apikey", "f2d587b7acc1cf9ae8d86fdcde51f394");
             meMap.put("ts", ts);
             meMap.put("hash", HelpMe.md5(ts + "b5abf01b39744e74f81d1079fa04a3b3a51c9b08" + "f2d587b7acc1cf9ae8d86fdcde51f394"));
-            meMap.put("offset",offset+"");
-            HandelCalls.getInstance(this).call(DataEnum.CallCharacterListMore.name(), meMap,"", true, this);
+            meMap.put("offset", offset + "");
+            meMap.put("nameStartsWith", searchword);
+            HandelCalls.getInstance(this).call(DataEnum.CallCharacterSearchMore.name(), meMap, "", true, this);
         }
-
-
     }
 
-    @OnClick(R.id.searchBtn)
+    @OnClick(R.id.cancelbtn)
     public void onViewClicked() {
-        startActivity(new Intent(MainActivity.this, SearchActivity.class));
+        finish();
     }
-    
-    
-    
-
 
     @Override
     public void onResponseSuccess(String flag, Object o) {
-        if (flag.equals(DataEnum.CallCharacterList.name())){
+        if (flag.equals(DataEnum.CallCharacterSearch.name())){
             modelCharacterList = (ModelCharacterList) o;
             getCharacterList(modelCharacterList.getData().getResults());
-            if (modelCharacterList.getData().getCount()<=modelCharacterList.getData().getTotal()){
+            if (modelCharacterList.getData().getOffset()<=modelCharacterList.getData().getTotal()){
                 loading=true;
-                offset=offset+1;
+                offset=offset+20;
             }
         }else {
             modelCharacterList = (ModelCharacterList) o;
             getCharacterListmore(modelCharacterList.getData());
         }
-
-
-
     }
-
-
-
 
     @Override
     public void onResponseFailure(String flag, String o) {
@@ -136,11 +146,13 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
 
     }
 
-
     private void getCharacterList(List<Result> results) {
-        characterListRecycler.setLayoutManager(layoutManager);
-        characterListAdapter = new CharacterListAdapter(results, this);
-        characterListRecycler.setAdapter(characterListAdapter);
+        if (results!=null&&results.size()>0){
+            characterListRecycler.setLayoutManager(layoutManager);
+            characterListAdapter = new CharacterListAdapter(results, this);
+            characterListRecycler.setAdapter(characterListAdapter);
+            characterListAdapter.notifyDataSetChanged();
+        }
 
 
     }
@@ -148,11 +160,9 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
     private void getCharacterListmore(Data data) {
         characterListAdapter.addAll(data.getResults());
         characterListAdapter.notifyDataSetChanged();
-        if (data.getCount()<=data.getTotal()){
+        if (data.getOffset()<=data.getTotal()){
             loading=true;
-            offset=offset+1;
+            offset=offset+20;
         }
     }
-
-
 }

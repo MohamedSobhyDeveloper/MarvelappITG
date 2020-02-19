@@ -2,6 +2,7 @@ package com.example.marvelappitg.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.marvelappitg.R;
-import com.example.marvelappitg.models.Itemcomics;
-import com.example.marvelappitg.models.Itemevents;
-import com.example.marvelappitg.models.Itemseries;
-import com.example.marvelappitg.models.Itemstories;
+import com.example.marvelappitg.models.modelcharacterlist.Itemcomics;
+import com.example.marvelappitg.models.modelcharacterlist.Itemevents;
+import com.example.marvelappitg.models.modelcharacterlist.Itemseries;
+import com.example.marvelappitg.models.modelcharacterlist.Itemstories;
+import com.example.marvelappitg.utlitites.DataEnum;
+import com.example.marvelappitg.views.activity.ShowImageActivity;
 
 import java.util.List;
 
@@ -70,6 +73,35 @@ public class InflateListAdapter extends RecyclerView.Adapter<InflateListAdapter.
             holder.tvCharactername.setText(itemsEvents.get(position).getName());
 
         }
+
+        holder.imgCharacter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemsComics != null) {
+
+                    Intent intent=new Intent(context, ShowImageActivity.class);
+                    intent.putExtra("url",itemsComics.get(position).getResourceURI());
+                    intent.putExtra("type", DataEnum.CallComicsDetails.name());
+                    context.startActivity(intent);
+                } else if (itemsSeries != null) {
+                    Intent intent=new Intent(context, ShowImageActivity.class);
+                    intent.putExtra("url",itemsSeries.get(position).getResourceURI());
+                    intent.putExtra("type",DataEnum.CallseriesDetails.name());
+                    context.startActivity(intent);
+                } else if (itemsStories != null) {
+//                    Intent intent=new Intent(context, ShowImageActivity.class);
+//                    intent.putExtra("url",itemsComics.get(position).getResourceURI());
+//                    intent.putExtra("type",DataEnum.CallstoriesDetails.name());
+//                    context.startActivity(intent);
+                } else {
+                    Intent intent=new Intent(context, ShowImageActivity.class);
+                    intent.putExtra("url",itemsEvents.get(position).getResourceURI());
+                    intent.putExtra("type",DataEnum.CalleventDetails.name());
+                    context.startActivity(intent);
+                }
+
+            }
+        });
 
 
     }

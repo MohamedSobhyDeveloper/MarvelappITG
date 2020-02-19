@@ -1,14 +1,15 @@
 
-package com.example.marvelappitg.models;
+package com.example.marvelappitg.models.modelcharacterlist;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Events implements Parcelable {
+public class Stories implements Parcelable {
 
     @SerializedName("available")
     @Expose
@@ -18,20 +19,20 @@ public class Events implements Parcelable {
     private String collectionURI;
     @SerializedName("items")
     @Expose
-    private List<Itemevents> items = null;
+    private List<Itemstories> items = null;
     @SerializedName("returned")
     @Expose
     private Integer returned;
 
 
-    protected Events(Parcel in) {
+    protected Stories(Parcel in) {
         if (in.readByte() == 0) {
             available = null;
         } else {
             available = in.readInt();
         }
         collectionURI = in.readString();
-        items = in.createTypedArrayList(Itemevents.CREATOR);
+        items = in.createTypedArrayList(Itemstories.CREATOR);
         if (in.readByte() == 0) {
             returned = null;
         } else {
@@ -39,15 +40,15 @@ public class Events implements Parcelable {
         }
     }
 
-    public static final Creator<Events> CREATOR = new Creator<Events>() {
+    public static final Creator<Stories> CREATOR = new Creator<Stories>() {
         @Override
-        public Events createFromParcel(Parcel in) {
-            return new Events(in);
+        public Stories createFromParcel(Parcel in) {
+            return new Stories(in);
         }
 
         @Override
-        public Events[] newArray(int size) {
-            return new Events[size];
+        public Stories[] newArray(int size) {
+            return new Stories[size];
         }
     };
 
@@ -67,11 +68,11 @@ public class Events implements Parcelable {
         this.collectionURI = collectionURI;
     }
 
-    public List<Itemevents> getItems() {
+    public List<Itemstories> getItems() {
         return items;
     }
 
-    public void setItems(List<Itemevents> items) {
+    public void setItems(List<Itemstories> items) {
         this.items = items;
     }
 
@@ -82,6 +83,7 @@ public class Events implements Parcelable {
     public void setReturned(Integer returned) {
         this.returned = returned;
     }
+
 
     @Override
     public int describeContents() {

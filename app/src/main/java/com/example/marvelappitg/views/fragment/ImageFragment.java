@@ -14,24 +14,20 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.marvelappitg.R;
-import com.stfalcon.imageviewer.StfalconImageViewer;
+import com.example.marvelappitg.models.modelcomicsdetails.Image;
 
 import java.util.List;
 import java.util.Objects;
 
 public class ImageFragment extends Fragment {
-
     private String url;
-    private List<String> photos;
-    private ViewPager pager;
-    private Context context;
+    private List<Image> photos;
 
-    public static ImageFragment getInstance(List<String> photos, ViewPager pager, Context context) {
+
+    public static ImageFragment getInstance(String url) {
 
         ImageFragment f = new ImageFragment();
-        f.context = context;
-        f.pager = pager;
-        f.photos = photos;
+        f.url = url;
         return f;
     }
 
@@ -47,23 +43,6 @@ public class ImageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ImageView imageView = view.findViewById(R.id.image);
-//        Glide.with(Objects.requireNonNull(getContext())).load(url).into(imageView);
-
-        imageView.setOnClickListener(v -> new StfalconImageViewer.Builder<>(getActivity(), photos,
-                (imageView1, image) -> {
-                    if (context != null)
-                        Glide.with(context).load(image).into(imageView1);
-
-                })
-                .withTransitionFrom(imageView)
-                .withHiddenStatusBar(true)
-                .withStartPosition(photos.indexOf(url) > -1 ? photos.indexOf(url) : 0)
-                .withHiddenStatusBar(true)
-                .withImageChangeListener(position1 -> {
-                    if (pager != null)
-                        pager.setCurrentItem(position1);
-                })
-                .show());
         Glide.with(Objects.requireNonNull(getContext())).load(url).into(imageView);
 
 

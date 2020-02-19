@@ -5,5 +5,5 @@ package com.example.marvelappitg.utlitites;
  */
 
 public enum DataEnum {
-    CallCharacterList,CallCharacterListMore,CallComicsDetails,CallseriesDetails,CallstoriesDetails,CalleventDetails
+    CallCharacterList,CallCharacterListMore,CallCharacterSearch,CallCharacterSearchMore,CallComicsDetails,CallseriesDetails,CallstoriesDetails,CalleventDetails
 }

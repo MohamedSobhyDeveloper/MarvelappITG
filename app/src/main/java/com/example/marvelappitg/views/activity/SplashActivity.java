@@ -1,4 +1,4 @@
-package com.example.marvelappitg.views;
+package com.example.marvelappitg.views.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -1,4 +1,4 @@
-package com.example.marvelappitg.views;
+package com.example.marvelappitg.views.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

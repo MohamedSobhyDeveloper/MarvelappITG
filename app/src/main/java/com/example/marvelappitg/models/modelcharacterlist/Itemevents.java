@@ -1,5 +1,5 @@
 
-package com.example.marvelappitg.models;
+package com.example.marvelappitg.models.modelcharacterlist;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,7 +7,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Itemcomics implements Parcelable {
+public class Itemevents implements Parcelable {
 
     @SerializedName("resourceURI")
     @Expose
@@ -16,20 +16,20 @@ public class Itemcomics implements Parcelable {
     @Expose
     private String name;
 
-    protected Itemcomics(Parcel in) {
+    protected Itemevents(Parcel in) {
         resourceURI = in.readString();
         name = in.readString();
     }
 
-    public static final Creator<Itemcomics> CREATOR = new Creator<Itemcomics>() {
+    public static final Creator<Itemevents> CREATOR = new Creator<Itemevents>() {
         @Override
-        public Itemcomics createFromParcel(Parcel in) {
-            return new Itemcomics(in);
+        public Itemevents createFromParcel(Parcel in) {
+            return new Itemevents(in);
         }
 
         @Override
-        public Itemcomics[] newArray(int size) {
-            return new Itemcomics[size];
+        public Itemevents[] newArray(int size) {
+            return new Itemevents[size];
         }
     };
 

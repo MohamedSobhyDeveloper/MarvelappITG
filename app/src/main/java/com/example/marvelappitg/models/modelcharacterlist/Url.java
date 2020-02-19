@@ -1,5 +1,5 @@
 
-package com.example.marvelappitg.models;
+package com.example.marvelappitg.models.modelcharacterlist;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

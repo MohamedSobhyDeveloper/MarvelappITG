@@ -1,14 +1,15 @@
 
-package com.example.marvelappitg.models;
+package com.example.marvelappitg.models.modelcharacterlist;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Stories implements Parcelable {
+public class Comics implements Parcelable {
 
     @SerializedName("available")
     @Expose
@@ -18,20 +19,19 @@ public class Stories implements Parcelable {
     private String collectionURI;
     @SerializedName("items")
     @Expose
-    private List<Itemstories> items = null;
+    private List<Itemcomics> itemcomics = null;
     @SerializedName("returned")
     @Expose
     private Integer returned;
 
-
-    protected Stories(Parcel in) {
+    protected Comics(Parcel in) {
         if (in.readByte() == 0) {
             available = null;
         } else {
             available = in.readInt();
         }
         collectionURI = in.readString();
-        items = in.createTypedArrayList(Itemstories.CREATOR);
+        itemcomics = in.createTypedArrayList(Itemcomics.CREATOR);
         if (in.readByte() == 0) {
             returned = null;
         } else {
@@ -39,15 +39,15 @@ public class Stories implements Parcelable {
         }
     }
 
-    public static final Creator<Stories> CREATOR = new Creator<Stories>() {
+    public static final Creator<Comics> CREATOR = new Creator<Comics>() {
         @Override
-        public Stories createFromParcel(Parcel in) {
-            return new Stories(in);
+        public Comics createFromParcel(Parcel in) {
+            return new Comics(in);
         }
 
         @Override
-        public Stories[] newArray(int size) {
-            return new Stories[size];
+        public Comics[] newArray(int size) {
+            return new Comics[size];
         }
     };
 
@@ -67,12 +67,12 @@ public class Stories implements Parcelable {
         this.collectionURI = collectionURI;
     }
 
-    public List<Itemstories> getItems() {
-        return items;
+    public List<Itemcomics> getItemcomics() {
+        return itemcomics;
     }
 
-    public void setItems(List<Itemstories> items) {
-        this.items = items;
+    public void setItemcomics(List<Itemcomics> itemcomics) {
+        this.itemcomics = itemcomics;
     }
 
     public Integer getReturned() {
@@ -98,7 +98,7 @@ public class Stories implements Parcelable {
             dest.writeInt(available);
         }
         dest.writeString(collectionURI);
-        dest.writeTypedList(items);
+        dest.writeTypedList(itemcomics);
         if (returned == null) {
             dest.writeByte((byte) 0);
         } else {

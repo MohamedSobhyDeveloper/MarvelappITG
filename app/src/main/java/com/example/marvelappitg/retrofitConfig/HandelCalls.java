@@ -69,22 +69,48 @@ public class HandelCalls {
                 String hash = meMap.get("hash");
                 String ts = meMap.get("ts");
                 String offset = meMap.get("offset");
-
-                callRetrofit(restRetrofit.getClientService().getCompanyInfo(ts,apikey,hash,offset), flag, ShowLoadingDialog);
+                callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset), flag, ShowLoadingDialog);
               }else if (flag.equals(DataEnum.CallCharacterListMore.name())){
                 String apikey = meMap.get("apikey");
                 String hash = meMap.get("hash");
                 String ts = meMap.get("ts");
                 String offset = meMap.get("offset");
-                callRetrofit(restRetrofit.getClientService().getCompanyInfo(ts,apikey,hash,offset), flag, ShowLoadingDialog);
-            } else if (flag.equals(DataEnum.CallComicsDetails.name())) {
-            callRetrofit(restRetrofit.getClientService().getcomicsDetails(url), flag, ShowLoadingDialog);
+                callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset), flag, ShowLoadingDialog);
+            }else if (flag.equals(DataEnum.CallCharacterSearch.name())){
+                String apikey = meMap.get("apikey");
+                String hash = meMap.get("hash");
+                String ts = meMap.get("ts");
+                String offset = meMap.get("offset");
+                String nameStartsWith = meMap.get("nameStartsWith");
+                callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset,nameStartsWith), flag, ShowLoadingDialog);
+            }else if (flag.equals(DataEnum.CallCharacterSearchMore.name())){
+                String apikey = meMap.get("apikey");
+                String hash = meMap.get("hash");
+                String ts = meMap.get("ts");
+                String offset = meMap.get("offset");
+                String nameStartsWith = meMap.get("nameStartsWith");
+                callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset,nameStartsWith), flag, ShowLoadingDialog);
+            }
+            else if (flag.equals(DataEnum.CallComicsDetails.name())) {
+                String apikey = meMap.get("apikey");
+                String hash = meMap.get("hash");
+                String ts = meMap.get("ts");
+            callRetrofit(restRetrofit.getClientService().getcomicsDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
              } else if (flag.equals(DataEnum.CallseriesDetails.name())) {
-                callRetrofit(restRetrofit.getClientService().getseriesDetails(url), flag, ShowLoadingDialog);
+                String apikey = meMap.get("apikey");
+                String hash = meMap.get("hash");
+                String ts = meMap.get("ts");
+                callRetrofit(restRetrofit.getClientService().getseriesDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
             } else if (flag.equals(DataEnum.CallstoriesDetails.name())) {
-                callRetrofit(restRetrofit.getClientService().getstoriesDetails(url), flag, ShowLoadingDialog);
+                String apikey = meMap.get("apikey");
+                String hash = meMap.get("hash");
+                String ts = meMap.get("ts");
+                callRetrofit(restRetrofit.getClientService().getstoriesDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
             } else if (flag.equals(DataEnum.CalleventDetails.name())) {
-                callRetrofit(restRetrofit.getClientService().geteventsDetails(url), flag, ShowLoadingDialog);
+                String apikey = meMap.get("apikey");
+                String hash = meMap.get("hash");
+                String ts = meMap.get("ts");
+                callRetrofit(restRetrofit.getClientService().geteventsDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
             }
 
     }
