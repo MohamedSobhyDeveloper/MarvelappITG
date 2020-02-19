@@ -1,6 +1,5 @@
 package com.example.marvelappitg.views.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,18 +9,15 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.example.marvelappitg.R;
-import com.example.marvelappitg.models.modelcomicsdetails.Image;
 
-import java.util.List;
 import java.util.Objects;
 
 public class ImageFragment extends Fragment {
     private String url;
-    private List<Image> photos;
 
 
     public static ImageFragment getInstance(String url) {
@@ -43,7 +39,11 @@ public class ImageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ImageView imageView = view.findViewById(R.id.image);
-        Glide.with(Objects.requireNonNull(getContext())).load(url).into(imageView);
+        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(getActivity());
+        circularProgressDrawable.setStrokeWidth(5f);
+        circularProgressDrawable.setCenterRadius(30f);
+        circularProgressDrawable.start();
+        Glide.with(Objects.requireNonNull(getContext())).load(url).placeholder(circularProgressDrawable).into(imageView);
 
 
     }

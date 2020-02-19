@@ -1,7 +1,7 @@
 package com.example.marvelappitg.views.activity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Process;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -11,7 +11,6 @@ import com.example.marvelappitg.R;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 
 
-@SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
     @Override
@@ -29,16 +28,16 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         new MaterialStyledDialog.Builder(this)
-                .setDescription("Want to exit from app")
-                .setPositiveText("yes")
-                .setNegativeText("No")
-//                .setIcon(R.drawable.logo)
+                .setDescription(getString(R.string.exit_app))
+                .setPositiveText(getString(R.string.yes))
+                .setNegativeText(getString(R.string.no))
+                .setIcon(R.drawable.marvel)
                 .setHeaderColor(R.color.colorPrimary)
                 .withDialogAnimation(true)
                 .withIconAnimation(true)
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
-                    android.os.Process.killProcess(android.os.Process.myPid());
+                    Process.killProcess(Process.myPid());
                     System.exit(1);
                     BaseActivity.this.finish();
 

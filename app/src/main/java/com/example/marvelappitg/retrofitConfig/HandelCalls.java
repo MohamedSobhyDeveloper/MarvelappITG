@@ -41,7 +41,7 @@ public class HandelCalls {
 
         if (instance == null) {
             instance = new HandelCalls();
-            restRetrofit = RestRetrofit.getInstance(context);
+            restRetrofit = RestRetrofit.getInstance();
         }
         return instance;
     }
@@ -49,53 +49,38 @@ public class HandelCalls {
 
     public void call(final String flag, HashMap<String, String> meMap,String url, Boolean ShowLoadingDialog, HandleRetrofitResp onRespnseSucess) {
         this.onRespnse = onRespnseSucess;
-
+        String apikey = meMap.get(Constant.apikey);
+        String hash = meMap.get(Constant.hash);
+        String ts = meMap.get(Constant.ts);
             if (flag.equals(DataEnum.CallCharacterList.name())) {
-                String apikey = meMap.get(Constant.apikey);
-                String hash = meMap.get(Constant.hash);
-                String ts = meMap.get(Constant.ts);
+
                 String offset = meMap.get(Constant.offset);
                 callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset), flag, ShowLoadingDialog);
               }else if (flag.equals(DataEnum.CallCharacterListMore.name())){
-                String apikey = meMap.get(Constant.apikey);
-                String hash = meMap.get(Constant.hash);
-                String ts = meMap.get(Constant.ts);
                 String offset = meMap.get(Constant.offset);
                 callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset), flag, ShowLoadingDialog);
             }else if (flag.equals(DataEnum.CallCharacterSearch.name())){
-                String apikey = meMap.get(Constant.apikey);
-                String hash = meMap.get(Constant.hash);
-                String ts = meMap.get(Constant.ts);
+
                 String offset = meMap.get(Constant.offset);
                 String nameStartsWith = meMap.get(Constant.nameStartsWith);
                 callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset,nameStartsWith), flag, ShowLoadingDialog);
             }else if (flag.equals(DataEnum.CallCharacterSearchMore.name())){
-                String apikey = meMap.get(Constant.apikey);
-                String hash = meMap.get(Constant.hash);
-                String ts = meMap.get(Constant.ts);
+
                 String offset = meMap.get(Constant.offset);
                 String nameStartsWith = meMap.get(Constant.nameStartsWith);
                 callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset,nameStartsWith), flag, ShowLoadingDialog);
             }
             else if (flag.equals(DataEnum.CallComicsDetails.name())) {
-                String apikey = meMap.get(Constant.apikey);
-                String hash = meMap.get(Constant.hash);
-                String ts = meMap.get(Constant.ts);
+
             callRetrofit(restRetrofit.getClientService().getcomicsDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
              } else if (flag.equals(DataEnum.CallseriesDetails.name())) {
-                String apikey = meMap.get(Constant.apikey);
-                String hash = meMap.get(Constant.hash);
-                String ts = meMap.get(Constant.ts);
+
                 callRetrofit(restRetrofit.getClientService().getseriesDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
             } else if (flag.equals(DataEnum.CallstoriesDetails.name())) {
-                String apikey = meMap.get(Constant.apikey);
-                String hash = meMap.get(Constant.hash);
-                String ts = meMap.get(Constant.ts);
+
                 callRetrofit(restRetrofit.getClientService().getstoriesDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
             } else if (flag.equals(DataEnum.CalleventDetails.name())) {
-                String apikey = meMap.get(Constant.apikey);
-                String hash = meMap.get(Constant.hash);
-                String ts = meMap.get(Constant.ts);
+
                 callRetrofit(restRetrofit.getClientService().geteventsDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
             }
 

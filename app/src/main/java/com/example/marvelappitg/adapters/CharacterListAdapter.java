@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -58,11 +59,15 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         RequestOptions options = new RequestOptions()
                 .override(ViewGroup.LayoutParams.MATCH_PARENT,150)
                 .centerCrop();
-//                .placeholder(R.mipmap.ic_launcher_round)
-//                .error(R.mipmap.ic_launcher_round);
+
+        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
+        circularProgressDrawable.setStrokeWidth(5f);
+        circularProgressDrawable.setCenterRadius(30f);
+        circularProgressDrawable.start();
 
 
-        Glide.with(context).load(path).apply(options).into(holder.imgCharacter);
+
+        Glide.with(context).load(path).placeholder(circularProgressDrawable).apply(options).into(holder.imgCharacter);
 
 
 

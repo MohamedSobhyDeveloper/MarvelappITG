@@ -103,6 +103,7 @@ public class SearchActivity extends AppCompatActivity implements HandleRetrofitR
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 if(s.length()>1){
+                    characterListRecycler.setAdapter(null);
                     offset=0;
                     callCharacterList(offset,searchword.getText().toString());
 
@@ -125,7 +126,6 @@ public class SearchActivity extends AppCompatActivity implements HandleRetrofitR
         meMap.put("offset", offset + "");
         meMap.put("nameStartsWith", searchword);
         if (offset==0) {
-
             HandelCalls.getInstance(this).call(DataEnum.CallCharacterSearch.name(), meMap, "", true, this);
         }else {
 

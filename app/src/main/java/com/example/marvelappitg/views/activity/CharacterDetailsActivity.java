@@ -97,7 +97,6 @@ public class CharacterDetailsActivity extends AppCompatActivity {
 
                 }
 
-
             }else if (i==1){
 
                 LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);

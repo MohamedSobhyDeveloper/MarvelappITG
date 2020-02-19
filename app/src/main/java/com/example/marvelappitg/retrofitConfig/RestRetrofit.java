@@ -1,7 +1,6 @@
 package com.example.marvelappitg.retrofitConfig;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,17 +10,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class RestRetrofit {
-
-    private static final String TAG = RestRetrofit.class.getSimpleName();
+class RestRetrofit {
 
     @SuppressLint("StaticFieldLeak")
     private static RestRetrofit instance;
     private static ApiCall apiService;
-    @SuppressLint("StaticFieldLeak")
-    private static Context mcontext;
-
-    public static String BaseUrl = "https://gateway.marvel.com:443/v1/";
 
 
     private RestRetrofit() {
@@ -38,8 +31,9 @@ public class RestRetrofit {
 
 
         OkHttpClient httpClient = builder.build();
+        String baseUrl = "https://gateway.marvel.com:443/v1/";
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();
@@ -47,19 +41,12 @@ public class RestRetrofit {
         apiService = retrofit.create(ApiCall.class);
     }
 
-    public static RestRetrofit getInstance(Context context) {
-        mcontext = context;
+    static RestRetrofit getInstance() {
         if (instance == null) {
             instance = new RestRetrofit();
         }
         return instance;
     }
-
-    public static void inititobj() {
-       instance=null;
-
-    }
-
 
 
     ApiCall getClientService() {
