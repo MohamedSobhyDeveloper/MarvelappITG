@@ -30,8 +30,5 @@ public class Loading extends AppCompatDialog {
         getWindow().setGravity(Gravity.CENTER);
         setContentView(R.layout.layout_loading);
         setCancelable(false);
-
-        AVLoadingIndicatorView ivLoading = findViewById(R.id.avi);
-
     }
 }

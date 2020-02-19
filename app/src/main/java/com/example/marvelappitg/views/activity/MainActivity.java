@@ -32,33 +32,28 @@ public class MainActivity extends BaseActivity {
     ImageView searchBtn;
     @BindView(R.id.character_list_recycler)
     RecyclerView characterListRecycler;
+
     CharacterListAdapter characterListAdapter;
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     private boolean loading = false;
-    int offset=0;
+    int offset = 0;
     CharacterViewModel characterViewModel;
 
     Loading loadingview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         initializePagination();
-
         callCharacterList(offset);
-
-
-
     }
 
 
-
     private void initializePagination() {
-        loadingview=new Loading(this);
-
+        loadingview = new Loading(this);
 
         characterListRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -67,7 +62,6 @@ public class MainActivity extends BaseActivity {
                     visibleItemCount = layoutManager.getChildCount();
                     totalItemCount = layoutManager.getItemCount();
                     pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-
                     if (loading) {
                         if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                             callCharacterList(offset);
@@ -80,28 +74,23 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-
-
     //region Call Api
-
     private void callCharacterList(int offset) {
-
         long tsLong = System.currentTimeMillis() / 1000;
         String ts = Long.toString(tsLong);
         HashMap<String, String> meMap = new HashMap<>();
         meMap.put("apikey", Constant.publicKey);
         meMap.put("ts", ts);
         meMap.put("hash", HelpMe.md5(ts + Constant.privateKey + Constant.publicKey));
-        meMap.put("offset",offset+"");
+        meMap.put("offset", String.valueOf(offset));
 
-        if (offset==0){
+        if (offset == 0) {
             loadingview.show();
-            characterViewModel=new CharacterViewModel(this.getApplication(),meMap);
-
+            characterViewModel = new CharacterViewModel(this.getApplication(), meMap);
             getCharacterList();
-        }else {
+        } else {
             loadingview.show();
-            characterViewModel=new CharacterViewModel(this.getApplication(),meMap);
+            characterViewModel = new CharacterViewModel(this.getApplication(), meMap);
             getCharacterListMore();
         }
 
@@ -109,7 +98,7 @@ public class MainActivity extends BaseActivity {
 
     private void getCharacterList() {
         characterViewModel.getCharacterResponseLiveData().observe(this, (modelCharacterList) -> {
-            if (modelCharacterList!=null){
+            if (modelCharacterList != null) {
                 getCharacterList(modelCharacterList.getData());
             }
 
@@ -118,14 +107,13 @@ public class MainActivity extends BaseActivity {
 
     private void getCharacterListMore() {
         characterViewModel.getCharacterResponseLiveData().observe(this, (modelCharacterList) -> {
-            if (modelCharacterList!=null){
+            if (modelCharacterList != null) {
                 CharacterListmore(modelCharacterList.getData());
             }
 
         });
     }
     //endregion
-
 
 
     //region Call Actions
@@ -135,9 +123,9 @@ public class MainActivity extends BaseActivity {
         characterListAdapter = new CharacterListAdapter(data.getResults(), this);
         characterListRecycler.setAdapter(characterListAdapter);
 
-        if (data.getOffset()<=data.getTotal()){
-            loading=true;
-            offset=offset+20;
+        if (data.getOffset() <= data.getTotal()) {
+            loading = true;
+            offset = offset + 20;
         }
 
     }
@@ -146,9 +134,9 @@ public class MainActivity extends BaseActivity {
         loadingview.dismiss();
         characterListAdapter.addAll(data.getResults());
         characterListAdapter.notifyDataSetChanged();
-        if (data.getOffset()<=data.getTotal()){
-            loading=true;
-            offset=offset+20;
+        if (data.getOffset() <= data.getTotal()) {
+            loading = true;
+            offset = offset + 20;
         }
     }
 
@@ -156,16 +144,10 @@ public class MainActivity extends BaseActivity {
     //endregion
 
 
-
-
     @OnClick(R.id.searchBtn)
     public void onViewClicked() {
         startActivity(new Intent(MainActivity.this, SearchActivity.class));
     }
-
-
-
-
 
 
 }
