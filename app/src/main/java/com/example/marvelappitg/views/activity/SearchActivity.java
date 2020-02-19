@@ -14,22 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.marvelappitg.R;
 import com.example.marvelappitg.adapters.CharacterListAdapter;
 import com.example.marvelappitg.models.modelcharacterlist.Data;
-import com.example.marvelappitg.models.modelcharacterlist.ModelCharacterList;
-import com.example.marvelappitg.models.modelcharacterlist.Result;
-import com.example.marvelappitg.retrofitConfig.HandelCalls;
-import com.example.marvelappitg.retrofitConfig.HandleRetrofitResp;
 import com.example.marvelappitg.utlitites.Constant;
-import com.example.marvelappitg.utlitites.DataEnum;
 import com.example.marvelappitg.utlitites.HelpMe;
+import com.example.marvelappitg.utlitites.Loading;
+import com.example.marvelappitg.view_model.CharacterSearchViewModel;
+import com.example.marvelappitg.view_model.CharacterViewModel;
 
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SearchActivity extends AppCompatActivity implements HandleRetrofitResp {
+public class SearchActivity extends AppCompatActivity {
 
     @BindView(R.id.searchword)
     EditText searchword;
@@ -41,9 +38,10 @@ public class SearchActivity extends AppCompatActivity implements HandleRetrofitR
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     private boolean loading = false;
-    ModelCharacterList modelCharacterList;
     int offset=0;
+    CharacterSearchViewModel characterViewModel;
 
+    Loading loadingview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +64,8 @@ public class SearchActivity extends AppCompatActivity implements HandleRetrofitR
 
 
     private void initailizePagination() {
+        loadingview=new Loading(this);
+
         characterListRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -124,65 +124,57 @@ public class SearchActivity extends AppCompatActivity implements HandleRetrofitR
         meMap.put("hash", HelpMe.md5(ts + Constant.privateKey + Constant.publicKey));
         meMap.put("offset", offset + "");
         meMap.put("nameStartsWith", searchword);
-        if (offset==0) {
-
-            HandelCalls.getInstance(this).call(DataEnum.CallCharacterSearch.name(), meMap, "", true, this);
+        if (offset==0){
+            loadingview.show();
+            characterViewModel=new CharacterSearchViewModel(this.getApplication(),meMap);
+            getCharacterList();
         }else {
-
-            HandelCalls.getInstance(this).call(DataEnum.CallCharacterSearchMore.name(), meMap, "", true, this);
+            loadingview.show();
+            characterViewModel=new CharacterSearchViewModel(this.getApplication(),meMap);
+            getCharacterListMore();
         }
     }
-
-    //endregion
-
-
-
-
-
-    //region Call Response
-
-    @Override
-    public void onResponseSuccess(String flag, Object o) {
-        if (flag.equals(DataEnum.CallCharacterSearch.name())){
-            modelCharacterList = (ModelCharacterList) o;
-            getCharacterList(modelCharacterList.getData().getResults());
-            if (modelCharacterList.getData().getOffset()<=modelCharacterList.getData().getTotal()){
-                loading=true;
-                offset=offset+20;
+    private void getCharacterList() {
+        characterViewModel.getCharacterSearchResponseLiveData().observe(this, (modelCharacterList) -> {
+            if (modelCharacterList!=null){
+                getCharacterList(modelCharacterList.getData());
             }
-        }else {
-            modelCharacterList = (ModelCharacterList) o;
-            getCharacterListmore(modelCharacterList.getData());
-        }
+
+        });
     }
 
-    @Override
-    public void onResponseFailure(String flag, String o) {
+    private void getCharacterListMore() {
+        characterViewModel.getCharacterSearchResponseLiveData().observe(this, (modelCharacterList) -> {
+            if (modelCharacterList!=null){
+                CharacterListmore(modelCharacterList.getData());
+            }
 
-    }
-
-    @Override
-    public void onNoContent(String flag, int code) {
-
+        });
     }
     //endregion
+
+
+
 
 
 
 
     //region Call Action
-    private void getCharacterList(List<Result> results) {
-        if (results!=null&&results.size()>0){
+    private void getCharacterList(Data data) {
+        loadingview.dismiss();
             characterListRecycler.setLayoutManager(layoutManager);
-            characterListAdapter = new CharacterListAdapter(results, this);
+            characterListAdapter = new CharacterListAdapter(data.getResults(), this);
             characterListRecycler.setAdapter(characterListAdapter);
             characterListAdapter.notifyDataSetChanged();
+         if (data.getOffset()<=data.getTotal()){
+            loading=true;
+            offset=offset+20;
         }
-
 
     }
 
-    private void getCharacterListmore(Data data) {
+    private void CharacterListmore(Data data) {
+        loadingview.dismiss();
         characterListAdapter.addAll(data.getResults());
         characterListAdapter.notifyDataSetChanged();
         if (data.getOffset()<=data.getTotal()){

@@ -13,21 +13,18 @@ import com.example.marvelappitg.R;
 import com.example.marvelappitg.adapters.CharacterListAdapter;
 import com.example.marvelappitg.models.modelcharacterlist.Data;
 import com.example.marvelappitg.models.modelcharacterlist.ModelCharacterList;
-import com.example.marvelappitg.models.modelcharacterlist.Result;
-import com.example.marvelappitg.retrofitConfig.HandelCalls;
-import com.example.marvelappitg.retrofitConfig.HandleRetrofitResp;
 import com.example.marvelappitg.utlitites.Constant;
-import com.example.marvelappitg.utlitites.DataEnum;
 import com.example.marvelappitg.utlitites.HelpMe;
+import com.example.marvelappitg.utlitites.Loading;
+import com.example.marvelappitg.view_model.CharacterViewModel;
 
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity implements HandleRetrofitResp {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -39,19 +36,17 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     private boolean loading = false;
-    ModelCharacterList modelCharacterList;
     int offset=0;
+    CharacterViewModel characterViewModel;
 
+    Loading loadingview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
         initializePagination();
-
-
 
         callCharacterList(offset);
 
@@ -62,6 +57,9 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
 
 
     private void initializePagination() {
+        loadingview=new Loading(this);
+
+
         characterListRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -73,7 +71,6 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
                     if (loading) {
                         if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                             callCharacterList(offset);
-
                             loading = false;
                         }
                     }
@@ -96,64 +93,57 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
         meMap.put("ts", ts);
         meMap.put("hash", HelpMe.md5(ts + Constant.privateKey + Constant.publicKey));
         meMap.put("offset",offset+"");
+
         if (offset==0){
-            HandelCalls.getInstance(this).call(DataEnum.CallCharacterList.name(), meMap,"", true, this);
+            loadingview.show();
+            characterViewModel=new CharacterViewModel(this.getApplication(),meMap);
+
+            getCharacterList();
         }else {
-            HandelCalls.getInstance(this).call(DataEnum.CallCharacterListMore.name(), meMap,"", true, this);
+            loadingview.show();
+            characterViewModel=new CharacterViewModel(this.getApplication(),meMap);
+            getCharacterListMore();
         }
 
     }
-    //endregion
 
-
-
-    
-    //region Call Response Api
-
-    @Override
-    public void onResponseSuccess(String flag, Object o) {
-        if (flag.equals(DataEnum.CallCharacterList.name())){
-            modelCharacterList = (ModelCharacterList) o;
-            getCharacterList(modelCharacterList.getData().getResults());
-            if (modelCharacterList.getData().getOffset()<=modelCharacterList.getData().getTotal()){
-                loading=true;
-                offset=offset+20;
+    private void getCharacterList() {
+        characterViewModel.getCharacterResponseLiveData().observe(this, (modelCharacterList) -> {
+            if (modelCharacterList!=null){
+                getCharacterList(modelCharacterList.getData());
             }
-        }else {
-            modelCharacterList = (ModelCharacterList) o;
-            getCharacterListmore(modelCharacterList.getData());
-        }
 
-
+        });
     }
 
+    private void getCharacterListMore() {
+        characterViewModel.getCharacterResponseLiveData().observe(this, (modelCharacterList) -> {
+            if (modelCharacterList!=null){
+                CharacterListmore(modelCharacterList.getData());
+            }
 
-
-
-    @Override
-    public void onResponseFailure(String flag, String o) {
-
+        });
     }
-
-    @Override
-    public void onNoContent(String flag, int code) {
-
-    }
-
-
     //endregion
 
 
 
     //region Call Actions
-    private void getCharacterList(List<Result> results) {
+    private void getCharacterList(Data data) {
+        loadingview.dismiss();
         characterListRecycler.setLayoutManager(layoutManager);
-        characterListAdapter = new CharacterListAdapter(results, this);
+        characterListAdapter = new CharacterListAdapter(data.getResults(), this);
         characterListRecycler.setAdapter(characterListAdapter);
+
+        if (data.getOffset()<=data.getTotal()){
+            loading=true;
+            offset=offset+20;
+        }
 
     }
 
-    private void getCharacterListmore(Data data) {
+    private void CharacterListmore(Data data) {
+        loadingview.dismiss();
         characterListAdapter.addAll(data.getResults());
         characterListAdapter.notifyDataSetChanged();
         if (data.getOffset()<=data.getTotal()){

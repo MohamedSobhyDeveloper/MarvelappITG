@@ -32,7 +32,7 @@ public class BaseActivity extends AppCompatActivity {
                 .setDescription("Want to exit from app")
                 .setPositiveText("yes")
                 .setNegativeText("No")
-//                .setIcon(R.drawable.logo)
+                .setIcon(R.drawable.marvel)
                 .setHeaderColor(R.color.colorPrimary)
                 .withDialogAnimation(true)
                 .withIconAnimation(true)
