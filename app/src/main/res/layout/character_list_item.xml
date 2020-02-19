@@ -1,4 +1,5 @@
-<RelativeLayout app:layout_constraintBottom_toBottomOf="parent"
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     android:id="@+id/linear"
@@ -7,14 +8,13 @@
     android:layout_height="@dimen/_150sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:shimmer="http://schemas.android.com/tools"
-    shimmer:ignore="RedundantNamespace">
+    >
 
     <ImageView
     android:layout_width="match_parent"
     android:layout_height="@dimen/_150sdp"
     android:id="@+id/imgCharacter"
-    />
+        tools:ignore="ContentDescription" />
     <TextView
         android:layout_width="@dimen/_100sdp"
         android:layout_height="wrap_content"
@@ -24,6 +24,6 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/roundedbuttond"
         android:layout_margin="@dimen/_14sdp"
-        />
+        tools:ignore="HardcodedText" />
     </RelativeLayout>
 
