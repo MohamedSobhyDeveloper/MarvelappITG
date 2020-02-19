@@ -2,10 +2,9 @@ package com.example.marvelappitg.repository;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.marvelappitg.models.modelcomicsdetails.ModelComicsDetails;
 import com.example.marvelappitg.models.modelseriesdetails.ModelSeriesDetails;
 import com.example.marvelappitg.retrofit.ApiRequest;
 import com.example.marvelappitg.retrofit.RetrofitRequest;
@@ -26,14 +25,14 @@ public class SeriesDetailsRepository {
         apiRequest = RetrofitRequest.getRetrofitInstance().create(ApiRequest.class);
     }
 
-    public LiveData<ModelSeriesDetails> getSeriesDetails(HashMap<String, String> meMap) {
+    public MutableLiveData<ModelSeriesDetails> getSeriesDetails(HashMap<String, String> meMap) {
         final MutableLiveData<ModelSeriesDetails> data = new MutableLiveData<>();
         apiRequest.getseriesDetails(meMap.get(Constant.url),meMap.get(Constant.ts),meMap.get(Constant.apikey),meMap.get(Constant.hash))
                 .enqueue(new Callback<ModelSeriesDetails>() {
 
 
                     @Override
-                    public void onResponse(Call<ModelSeriesDetails> call, Response<ModelSeriesDetails> response) {
+                    public void onResponse(@NonNull Call<ModelSeriesDetails> call, @NonNull Response<ModelSeriesDetails> response) {
                         Log.d(TAG, "onResponse response:: " + response);
 
 
@@ -45,7 +44,7 @@ public class SeriesDetailsRepository {
                     }
 
                     @Override
-                    public void onFailure(Call<ModelSeriesDetails> call, Throwable t) {
+                    public void onFailure(@NonNull Call<ModelSeriesDetails> call, @NonNull Throwable t) {
                         data.setValue(null);
                     }
                 });

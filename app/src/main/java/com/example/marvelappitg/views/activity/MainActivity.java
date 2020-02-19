@@ -84,13 +84,11 @@ public class MainActivity extends BaseActivity {
         meMap.put("hash", HelpMe.md5(ts + Constant.privateKey + Constant.publicKey));
         meMap.put("offset", String.valueOf(offset));
 
+        loadingview.show();
+        characterViewModel = new CharacterViewModel(this.getApplication(), meMap);
         if (offset == 0) {
-            loadingview.show();
-            characterViewModel = new CharacterViewModel(this.getApplication(), meMap);
             getCharacterList();
         } else {
-            loadingview.show();
-            characterViewModel = new CharacterViewModel(this.getApplication(), meMap);
             getCharacterListMore();
         }
 

@@ -23,6 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.activity.MainActivity" />
+        <activity android:name=".views.activity.BaseActivity" />
+
     </application>
 
 </manifest>

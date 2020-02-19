@@ -18,7 +18,6 @@ import com.example.marvelappitg.utlitites.Constant;
 import com.example.marvelappitg.utlitites.HelpMe;
 import com.example.marvelappitg.utlitites.Loading;
 import com.example.marvelappitg.view_model.CharacterSearchViewModel;
-import com.example.marvelappitg.view_model.CharacterViewModel;
 
 import java.util.HashMap;
 
@@ -124,13 +123,11 @@ public class SearchActivity extends AppCompatActivity {
         meMap.put("hash", HelpMe.md5(ts + Constant.privateKey + Constant.publicKey));
         meMap.put("offset", offset + "");
         meMap.put("nameStartsWith", searchword);
+        loadingview.show();
+        characterViewModel=new CharacterSearchViewModel(this.getApplication(),meMap);
         if (offset==0){
-            loadingview.show();
-            characterViewModel=new CharacterSearchViewModel(this.getApplication(),meMap);
             getCharacterList();
         }else {
-            loadingview.show();
-            characterViewModel=new CharacterSearchViewModel(this.getApplication(),meMap);
             getCharacterListMore();
         }
     }

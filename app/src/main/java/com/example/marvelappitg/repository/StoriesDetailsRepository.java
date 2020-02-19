@@ -26,7 +26,7 @@ public class StoriesDetailsRepository {
         apiRequest = RetrofitRequest.getRetrofitInstance().create(ApiRequest.class);
     }
 
-    public LiveData<ModelStoriesDetails> getstoriesDetails(HashMap<String, String> meMap) {
+    public MutableLiveData<ModelStoriesDetails> getstoriesDetails(HashMap<String, String> meMap) {
         final MutableLiveData<ModelStoriesDetails> data = new MutableLiveData<>();
         apiRequest.getstoriesDetails(meMap.get(Constant.url),meMap.get(Constant.ts),meMap.get(Constant.apikey),meMap.get(Constant.hash))
                 .enqueue(new Callback<ModelStoriesDetails>() {

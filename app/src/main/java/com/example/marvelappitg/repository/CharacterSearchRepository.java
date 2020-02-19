@@ -2,7 +2,7 @@ package com.example.marvelappitg.repository;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.marvelappitg.models.modelcharacterlist.ModelCharacterList;
@@ -25,14 +25,14 @@ public class CharacterSearchRepository {
         apiRequest = RetrofitRequest.getRetrofitInstance().create(ApiRequest.class);
     }
 
-    public LiveData<ModelCharacterList> getCharacterList(HashMap<String, String> meMap) {
+    public MutableLiveData<ModelCharacterList> getCharacterList(HashMap<String, String> meMap) {
         final MutableLiveData<ModelCharacterList> data = new MutableLiveData<>();
         apiRequest.getCharacterList(meMap.get(Constant.ts),meMap.get(Constant.apikey),meMap.get(Constant.hash),meMap.get(Constant.offset),meMap.get(Constant.nameStartsWith))
                 .enqueue(new Callback<ModelCharacterList>() {
 
 
                     @Override
-                    public void onResponse(Call<ModelCharacterList> call, Response<ModelCharacterList> response) {
+                    public void onResponse(@NonNull Call<ModelCharacterList> call, @NonNull Response<ModelCharacterList> response) {
                         Log.d(TAG, "onResponse response:: " + response);
 
 
@@ -44,7 +44,7 @@ public class CharacterSearchRepository {
                     }
 
                     @Override
-                    public void onFailure(Call<ModelCharacterList> call, Throwable t) {
+                    public void onFailure(@NonNull Call<ModelCharacterList> call, @NonNull Throwable t) {
                         data.setValue(null);
                     }
                 });

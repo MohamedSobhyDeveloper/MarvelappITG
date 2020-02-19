@@ -25,7 +25,7 @@ public class ComicsDetailsRepository {
         apiRequest = RetrofitRequest.getRetrofitInstance().create(ApiRequest.class);
     }
 
-    public LiveData<ModelComicsDetails> getComicsDetails(HashMap<String, String> meMap) {
+    public MutableLiveData<ModelComicsDetails> getComicsDetails(HashMap<String, String> meMap) {
         final MutableLiveData<ModelComicsDetails> data = new MutableLiveData<>();
         apiRequest.getcomicsDetails(meMap.get(Constant.url),meMap.get(Constant.ts),meMap.get(Constant.apikey),meMap.get(Constant.hash))
                 .enqueue(new Callback<ModelComicsDetails>() {

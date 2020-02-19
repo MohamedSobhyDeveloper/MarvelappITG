@@ -26,7 +26,7 @@ public class EventsDetailsRepository {
         apiRequest = RetrofitRequest.getRetrofitInstance().create(ApiRequest.class);
     }
 
-    public LiveData<ModelEventDetails> geteventDetails(HashMap<String, String> meMap) {
+    public MutableLiveData<ModelEventDetails> geteventDetails(HashMap<String, String> meMap) {
         final MutableLiveData<ModelEventDetails> data = new MutableLiveData<>();
         apiRequest.geteventsDetails(meMap.get(Constant.url),meMap.get(Constant.ts),meMap.get(Constant.apikey),meMap.get(Constant.hash))
                 .enqueue(new Callback<ModelEventDetails>() {

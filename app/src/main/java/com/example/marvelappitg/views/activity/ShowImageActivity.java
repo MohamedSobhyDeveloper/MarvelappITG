@@ -76,25 +76,20 @@ public class ShowImageActivity extends AppCompatActivity  {
         meMap.put("apikey", "f2d587b7acc1cf9ae8d86fdcde51f394");
         meMap.put("ts", ts);
         meMap.put("hash", HelpMe.md5(ts + "b5abf01b39744e74f81d1079fa04a3b3a51c9b08" + "f2d587b7acc1cf9ae8d86fdcde51f394"));
-//        HandelCalls.getInstance(this).call(type, meMap, url, true, this);
-
+        loadingview.show();
 
         if (type.equals(DataEnum.CallComicsDetails.name())) {
-            loadingview.show();
             comicsViewModel=new ComicsViewModel(this.getApplication(),meMap);
             getComicsImageList();
 
         } else if (type.equals(DataEnum.CallseriesDetails.name())) {
-            loadingview.show();
             seriesViewModel=new SeriesViewModel(this.getApplication(),meMap);
             getSeriesImageList();
 
         } else if (type.equals(DataEnum.CallstoriesDetails.name())) {
-            loadingview.show();
             storiesViewModel=new StoriesViewModel(this.getApplication(),meMap);
             getStoriesImageList();
         } else {
-            loadingview.show();
             eventsViewModel=new EventsViewModel(this.getApplication(),meMap);
             getEventsImageList();
         }
