@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.marvelappitg.R;
 import com.example.marvelappitg.models.modelcharacterlist.Result;
+import com.example.marvelappitg.utlitites.Constant;
 import com.example.marvelappitg.views.activity.CharacterDetailsActivity;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
 
         holder.tvCharactername.setText(items.get(position).getName());
         String path=items.get(position).getThumbnail().getPath()+"."+items.get(position).getThumbnail().getExtension();
-//        Picasso.with(context).setLoggingEnabled(true).load(path).into(holder.imgCharacter);
+
         RequestOptions options = new RequestOptions()
                 .override(ViewGroup.LayoutParams.MATCH_PARENT,150)
                 .centerCrop()
@@ -61,13 +62,10 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
 
         Glide.with(context).load(path).apply(options).into(holder.imgCharacter);
 
-        holder.tvCharactername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(context, CharacterDetailsActivity.class);
-                intent.putExtra("characterDetails",items.get(position));
-                context.startActivity(intent);
-            }
+        holder.tvCharactername.setOnClickListener(v -> {
+            Intent intent=new Intent(context, CharacterDetailsActivity.class);
+            intent.putExtra(Constant.characterDetails,items.get(position));
+            context.startActivity(intent);
         });
 
     }

@@ -1,5 +1,6 @@
 package com.example.marvelappitg.views.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,9 @@ import com.example.marvelappitg.models.modelcharacterlist.Events;
 import com.example.marvelappitg.models.modelcharacterlist.Result;
 import com.example.marvelappitg.models.modelcharacterlist.Series;
 import com.example.marvelappitg.models.modelcharacterlist.Stories;
+import com.example.marvelappitg.utlitites.Constant;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,26 +48,37 @@ public class CharacterDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_details);
         ButterKnife.bind(this);
-        Result results=getIntent().getParcelableExtra("characterDetails");
+
+
+        initialize();
+
+
+
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void initialize() {
+        Result results=getIntent().getParcelableExtra(Constant.characterDetails);
         RequestOptions options = new RequestOptions()
                 .override(ViewGroup.LayoutParams.MATCH_PARENT,200)
                 .centerCrop()
                 .placeholder(R.mipmap.ic_launcher_round)
                 .error(R.mipmap.ic_launcher_round);
 
-        Glide.with(this).load(results.getThumbnail().getPath()+"."+results.getThumbnail().getExtension()).apply(options).into(imgCharacter);
+        Glide.with(this).load(Objects.requireNonNull(results).getThumbnail().getPath()+"."+results.getThumbnail().getExtension()).apply(options).into(imgCharacter);
         characterName.setText(results.getName());
         characterDescription.setText(results.getDescription()+"");
 
 
         getinflateList(results.getComics(),results.getSeries(),results.getStories(),results.getEvents());
-
-
     }
 
+    @SuppressLint("InflateParams")
     private void getinflateList(Comics comics, Series series, Stories stories, Events events) {
 
         for (int i=0;i<4;i++){
+
             if (i==0){
                 LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
                 final View rowView;
@@ -72,7 +87,7 @@ public class CharacterDetailsActivity extends AppCompatActivity {
                     rowView = inflater.inflate(R.layout.inflate_layout, null);
                     final TextView inflateTv = rowView.findViewById(R.id.tvInflatername);
                     RecyclerView recyclerView = rowView.findViewById(R.id.recycer_inflate);
-                    inflateTv.setText("Comics");
+                    inflateTv.setText(Constant.comics);
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
                     InflateListAdapter inflateListAdapter = new InflateListAdapter(comics.getItemcomics(),null,null,null,this);
@@ -92,7 +107,7 @@ public class CharacterDetailsActivity extends AppCompatActivity {
                     rowView = inflater.inflate(R.layout.inflate_layout, null);
                     final TextView inflateTv = rowView.findViewById(R.id.tvInflatername);
                     RecyclerView recyclerView = rowView.findViewById(R.id.recycer_inflate);
-                    inflateTv.setText("Series");
+                    inflateTv.setText(Constant.series);
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
                     InflateListAdapter inflateListAdapter = new InflateListAdapter(null,series.getItems(),null,null,this);
@@ -110,7 +125,7 @@ public class CharacterDetailsActivity extends AppCompatActivity {
                     rowView = inflater.inflate(R.layout.inflate_layout, null);
                     final TextView inflateTv = rowView.findViewById(R.id.tvInflatername);
                     RecyclerView recyclerView = rowView.findViewById(R.id.recycer_inflate);
-                    inflateTv.setText("Stories");
+                    inflateTv.setText(Constant.stories);
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
                     InflateListAdapter inflateListAdapter = new InflateListAdapter(null,null,stories.getItems(),null,this);
@@ -128,7 +143,7 @@ public class CharacterDetailsActivity extends AppCompatActivity {
                     rowView = inflater.inflate(R.layout.inflate_layout, null);
                     final TextView inflateTv = rowView.findViewById(R.id.tvInflatername);
                     RecyclerView recyclerView = rowView.findViewById(R.id.recycer_inflate);
-                    inflateTv.setText("Events");
+                    inflateTv.setText(Constant.events);
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
                     InflateListAdapter inflateListAdapter = new InflateListAdapter(null,null,null,events.getItems(),this);

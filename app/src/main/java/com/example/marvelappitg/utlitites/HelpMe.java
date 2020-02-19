@@ -8,6 +8,8 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 
+import com.sdsmdg.tastytoast.TastyToast;
+
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -63,10 +65,10 @@ public class HelpMe {
 
         if (t instanceof IOException) {
 
-//               TastyToast.makeText(context, "Check Internet Connection", TastyToast.LENGTH_LONG, TastyToast.ERROR);
+               TastyToast.makeText(context, "Check Internet Connection", TastyToast.LENGTH_LONG, TastyToast.ERROR);
 
         } else {
-            //   TastyToast.makeText(context, t.getMessage(), TastyToast.LENGTH_LONG, TastyToast.ERROR);
+               TastyToast.makeText(context, t.getMessage(), TastyToast.LENGTH_LONG, TastyToast.ERROR);
             Log.e("errrr", Objects.requireNonNull(t.getMessage()));
         }
     }

@@ -18,6 +18,7 @@ import com.example.marvelappitg.models.modelcharacterlist.ModelCharacterList;
 import com.example.marvelappitg.models.modelcharacterlist.Result;
 import com.example.marvelappitg.retrofitConfig.HandelCalls;
 import com.example.marvelappitg.retrofitConfig.HandleRetrofitResp;
+import com.example.marvelappitg.utlitites.Constant;
 import com.example.marvelappitg.utlitites.DataEnum;
 import com.example.marvelappitg.utlitites.HelpMe;
 
@@ -42,12 +43,29 @@ public class SearchActivity extends AppCompatActivity implements HandleRetrofitR
     private boolean loading = false;
     ModelCharacterList modelCharacterList;
     int offset=0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
+
+        initailizePagination();
+
+
+
+        initializeSearch();
+
+
+
+
+
+    }
+
+
+    private void initailizePagination() {
         characterListRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -67,8 +85,10 @@ public class SearchActivity extends AppCompatActivity implements HandleRetrofitR
             }
 
         });
+    }
 
 
+    private void initializeSearch() {
         searchword.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -92,34 +112,34 @@ public class SearchActivity extends AppCompatActivity implements HandleRetrofitR
         });
     }
 
+
+
+    //region Call API
     private void callCharacterList(int offset, String searchword) {
+        long tsLong = System.currentTimeMillis() / 1000;
+        String ts = Long.toString(tsLong);
+        HashMap<String, String> meMap = new HashMap<>();
+        meMap.put("apikey", Constant.publicKey);
+        meMap.put("ts", ts);
+        meMap.put("hash", HelpMe.md5(ts + Constant.privateKey + Constant.publicKey));
+        meMap.put("offset", offset + "");
+        meMap.put("nameStartsWith", searchword);
         if (offset==0) {
-            Long tsLong = System.currentTimeMillis() / 1000;
-            String ts = tsLong.toString();
-            HashMap<String, String> meMap = new HashMap<>();
-            meMap.put("apikey", "f2d587b7acc1cf9ae8d86fdcde51f394");
-            meMap.put("ts", ts);
-            meMap.put("hash", HelpMe.md5(ts + "b5abf01b39744e74f81d1079fa04a3b3a51c9b08" + "f2d587b7acc1cf9ae8d86fdcde51f394"));
-            meMap.put("offset", offset + "");
-            meMap.put("nameStartsWith", searchword);
+
             HandelCalls.getInstance(this).call(DataEnum.CallCharacterSearch.name(), meMap, "", true, this);
         }else {
-            Long tsLong = System.currentTimeMillis() / 1000;
-            String ts = tsLong.toString();
-            HashMap<String, String> meMap = new HashMap<>();
-            meMap.put("apikey", "f2d587b7acc1cf9ae8d86fdcde51f394");
-            meMap.put("ts", ts);
-            meMap.put("hash", HelpMe.md5(ts + "b5abf01b39744e74f81d1079fa04a3b3a51c9b08" + "f2d587b7acc1cf9ae8d86fdcde51f394"));
-            meMap.put("offset", offset + "");
-            meMap.put("nameStartsWith", searchword);
+
             HandelCalls.getInstance(this).call(DataEnum.CallCharacterSearchMore.name(), meMap, "", true, this);
         }
     }
 
-    @OnClick(R.id.cancelbtn)
-    public void onViewClicked() {
-        finish();
-    }
+    //endregion
+
+
+
+
+
+    //region Call Response
 
     @Override
     public void onResponseSuccess(String flag, Object o) {
@@ -145,7 +165,12 @@ public class SearchActivity extends AppCompatActivity implements HandleRetrofitR
     public void onNoContent(String flag, int code) {
 
     }
+    //endregion
 
+
+
+
+    //region Call Action
     private void getCharacterList(List<Result> results) {
         if (results!=null&&results.size()>0){
             characterListRecycler.setLayoutManager(layoutManager);
@@ -165,4 +190,16 @@ public class SearchActivity extends AppCompatActivity implements HandleRetrofitR
             offset=offset+20;
         }
     }
+
+    //endregion
+
+
+
+
+
+    @OnClick(R.id.cancelbtn)
+    public void onViewClicked() {
+        finish();
+    }
+
 }

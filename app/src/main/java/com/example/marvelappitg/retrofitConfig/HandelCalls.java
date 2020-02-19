@@ -2,10 +2,10 @@ package com.example.marvelappitg.retrofitConfig;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.marvelappitg.utlitites.Constant;
 import com.example.marvelappitg.utlitites.DataEnum;
 import com.example.marvelappitg.utlitites.HelpMe;
 import com.example.marvelappitg.utlitites.Loading;
@@ -20,12 +20,10 @@ import retrofit2.Response;
 
 
 /**
- * Created by sobhy on 27/1/2020.
+ * Created by sobhy on 19/2/2020.
  */
 
 public class HandelCalls {
-
-    private static final String TAG = HandelCalls.class.getSimpleName();
 
 
     @SuppressLint("StaticFieldLeak")
@@ -47,69 +45,57 @@ public class HandelCalls {
         }
         return instance;
     }
-    public static void inititobjHandcalls() {
-        instance=null;
-
-    }
-    /**
-     * @param onRespnseSucess
-     */
-    public void setonRespnseSucess(HandleRetrofitResp onRespnseSucess) {
-        this.onRespnse = onRespnseSucess;
-    }
-
-
 
 
     public void call(final String flag, HashMap<String, String> meMap,String url, Boolean ShowLoadingDialog, HandleRetrofitResp onRespnseSucess) {
         this.onRespnse = onRespnseSucess;
 
             if (flag.equals(DataEnum.CallCharacterList.name())) {
-                String apikey = meMap.get("apikey");
-                String hash = meMap.get("hash");
-                String ts = meMap.get("ts");
-                String offset = meMap.get("offset");
+                String apikey = meMap.get(Constant.apikey);
+                String hash = meMap.get(Constant.hash);
+                String ts = meMap.get(Constant.ts);
+                String offset = meMap.get(Constant.offset);
                 callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset), flag, ShowLoadingDialog);
               }else if (flag.equals(DataEnum.CallCharacterListMore.name())){
-                String apikey = meMap.get("apikey");
-                String hash = meMap.get("hash");
-                String ts = meMap.get("ts");
-                String offset = meMap.get("offset");
+                String apikey = meMap.get(Constant.apikey);
+                String hash = meMap.get(Constant.hash);
+                String ts = meMap.get(Constant.ts);
+                String offset = meMap.get(Constant.offset);
                 callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset), flag, ShowLoadingDialog);
             }else if (flag.equals(DataEnum.CallCharacterSearch.name())){
-                String apikey = meMap.get("apikey");
-                String hash = meMap.get("hash");
-                String ts = meMap.get("ts");
-                String offset = meMap.get("offset");
-                String nameStartsWith = meMap.get("nameStartsWith");
+                String apikey = meMap.get(Constant.apikey);
+                String hash = meMap.get(Constant.hash);
+                String ts = meMap.get(Constant.ts);
+                String offset = meMap.get(Constant.offset);
+                String nameStartsWith = meMap.get(Constant.nameStartsWith);
                 callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset,nameStartsWith), flag, ShowLoadingDialog);
             }else if (flag.equals(DataEnum.CallCharacterSearchMore.name())){
-                String apikey = meMap.get("apikey");
-                String hash = meMap.get("hash");
-                String ts = meMap.get("ts");
-                String offset = meMap.get("offset");
-                String nameStartsWith = meMap.get("nameStartsWith");
+                String apikey = meMap.get(Constant.apikey);
+                String hash = meMap.get(Constant.hash);
+                String ts = meMap.get(Constant.ts);
+                String offset = meMap.get(Constant.offset);
+                String nameStartsWith = meMap.get(Constant.nameStartsWith);
                 callRetrofit(restRetrofit.getClientService().getCharacterList(ts,apikey,hash,offset,nameStartsWith), flag, ShowLoadingDialog);
             }
             else if (flag.equals(DataEnum.CallComicsDetails.name())) {
-                String apikey = meMap.get("apikey");
-                String hash = meMap.get("hash");
-                String ts = meMap.get("ts");
+                String apikey = meMap.get(Constant.apikey);
+                String hash = meMap.get(Constant.hash);
+                String ts = meMap.get(Constant.ts);
             callRetrofit(restRetrofit.getClientService().getcomicsDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
              } else if (flag.equals(DataEnum.CallseriesDetails.name())) {
-                String apikey = meMap.get("apikey");
-                String hash = meMap.get("hash");
-                String ts = meMap.get("ts");
+                String apikey = meMap.get(Constant.apikey);
+                String hash = meMap.get(Constant.hash);
+                String ts = meMap.get(Constant.ts);
                 callRetrofit(restRetrofit.getClientService().getseriesDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
             } else if (flag.equals(DataEnum.CallstoriesDetails.name())) {
-                String apikey = meMap.get("apikey");
-                String hash = meMap.get("hash");
-                String ts = meMap.get("ts");
+                String apikey = meMap.get(Constant.apikey);
+                String hash = meMap.get(Constant.hash);
+                String ts = meMap.get(Constant.ts);
                 callRetrofit(restRetrofit.getClientService().getstoriesDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
             } else if (flag.equals(DataEnum.CalleventDetails.name())) {
-                String apikey = meMap.get("apikey");
-                String hash = meMap.get("hash");
-                String ts = meMap.get("ts");
+                String apikey = meMap.get(Constant.apikey);
+                String hash = meMap.get(Constant.hash);
+                String ts = meMap.get(Constant.ts);
                 callRetrofit(restRetrofit.getClientService().geteventsDetails(url,ts,apikey,hash), flag, ShowLoadingDialog);
             }
 
@@ -126,33 +112,22 @@ public class HandelCalls {
                 progressDialog.show();
             }
         }
-
-
         call.enqueue(new Callback<T>() {
             @Override
             public void onResponse(@NonNull Call<T> call, @NonNull Response<T> response) {
-                Log.d("test", "onResponse() called with: call = [" + call + "], response = [" + response + "]" + "response returned");
-
                 if (ShowDialog) {
                     if (progressDialog!=null&&progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
                 }
-
-                Log.e(TAG, "onResponse: " + response.toString());
                 if (response.code()==204){
                     onRespnse.onNoContent(flag,response.code());
                 }else if (response.isSuccessful() && response.body() != null) {
                         if (onRespnse != null)
-                            Log.d("testing", "onResponse() minma called with: call = [" + call + "], response = [" + response + "]");
                         Objects.requireNonNull(onRespnse).onResponseSuccess(flag, response.body());
 
-                      // TODO - 4 Add 400 to condition base on (LoginActivity Response)
-//                        if (response.code() == 400 || response.code() == 401||response.code()==404)
                     } else {
-                    Log.e("res1", "resp");
                     if (onRespnse != null) {
-                        Log.e("res2", "resp");
                         try {
                             onRespnse.onResponseFailure(flag, response.errorBody().string());
                         } catch (IOException e) {

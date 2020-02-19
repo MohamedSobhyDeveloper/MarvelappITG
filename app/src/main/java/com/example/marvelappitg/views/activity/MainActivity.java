@@ -16,6 +16,7 @@ import com.example.marvelappitg.models.modelcharacterlist.ModelCharacterList;
 import com.example.marvelappitg.models.modelcharacterlist.Result;
 import com.example.marvelappitg.retrofitConfig.HandelCalls;
 import com.example.marvelappitg.retrofitConfig.HandleRetrofitResp;
+import com.example.marvelappitg.utlitites.Constant;
 import com.example.marvelappitg.utlitites.DataEnum;
 import com.example.marvelappitg.utlitites.HelpMe;
 
@@ -40,12 +41,27 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
     private boolean loading = false;
     ModelCharacterList modelCharacterList;
     int offset=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
+        initializePagination();
+
+
+
+        callCharacterList(offset);
+
+
+
+    }
+
+
+
+    private void initializePagination() {
         characterListRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -65,45 +81,34 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
             }
 
         });
-
-        callCharacterList(offset);
-
-
-
     }
 
+
+
+    //region Call Api
+
     private void callCharacterList(int offset) {
+
+        long tsLong = System.currentTimeMillis() / 1000;
+        String ts = Long.toString(tsLong);
+        HashMap<String, String> meMap = new HashMap<>();
+        meMap.put("apikey", Constant.publicKey);
+        meMap.put("ts", ts);
+        meMap.put("hash", HelpMe.md5(ts + Constant.privateKey + Constant.publicKey));
+        meMap.put("offset",offset+"");
         if (offset==0){
-            Long tsLong = System.currentTimeMillis() / 1000;
-            String ts = tsLong.toString();
-            HashMap<String, String> meMap = new HashMap<>();
-            meMap.put("apikey", "f2d587b7acc1cf9ae8d86fdcde51f394");
-            meMap.put("ts", ts);
-            meMap.put("hash", HelpMe.md5(ts + "b5abf01b39744e74f81d1079fa04a3b3a51c9b08" + "f2d587b7acc1cf9ae8d86fdcde51f394"));
-            meMap.put("offset",offset+"");
             HandelCalls.getInstance(this).call(DataEnum.CallCharacterList.name(), meMap,"", true, this);
         }else {
-            Long tsLong = System.currentTimeMillis() / 1000;
-            String ts = tsLong.toString();
-            HashMap<String, String> meMap = new HashMap<>();
-            meMap.put("apikey", "f2d587b7acc1cf9ae8d86fdcde51f394");
-            meMap.put("ts", ts);
-            meMap.put("hash", HelpMe.md5(ts + "b5abf01b39744e74f81d1079fa04a3b3a51c9b08" + "f2d587b7acc1cf9ae8d86fdcde51f394"));
-            meMap.put("offset",offset+"");
             HandelCalls.getInstance(this).call(DataEnum.CallCharacterListMore.name(), meMap,"", true, this);
         }
 
-
     }
+    //endregion
 
-    @OnClick(R.id.searchBtn)
-    public void onViewClicked() {
-        startActivity(new Intent(MainActivity.this, SearchActivity.class));
-    }
-    
-    
-    
 
+
+    
+    //region Call Response Api
 
     @Override
     public void onResponseSuccess(String flag, Object o) {
@@ -118,7 +123,6 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
             modelCharacterList = (ModelCharacterList) o;
             getCharacterListmore(modelCharacterList.getData());
         }
-
 
 
     }
@@ -137,6 +141,11 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
     }
 
 
+    //endregion
+
+
+
+    //region Call Actions
     private void getCharacterList(List<Result> results) {
         characterListRecycler.setLayoutManager(layoutManager);
         characterListAdapter = new CharacterListAdapter(results, this);
@@ -152,6 +161,21 @@ public class MainActivity extends BaseActivity implements HandleRetrofitResp {
             offset=offset+20;
         }
     }
+
+
+    //endregion
+
+
+
+
+    @OnClick(R.id.searchBtn)
+    public void onViewClicked() {
+        startActivity(new Intent(MainActivity.this, SearchActivity.class));
+    }
+
+
+
+
 
 
 }

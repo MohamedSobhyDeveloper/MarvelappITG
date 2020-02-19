@@ -13,6 +13,7 @@ import com.example.marvelappitg.models.modeleventdetails.ModelEventDetails;
 import com.example.marvelappitg.models.modelseriesdetails.ModelSeriesDetails;
 import com.example.marvelappitg.retrofitConfig.HandelCalls;
 import com.example.marvelappitg.retrofitConfig.HandleRetrofitResp;
+import com.example.marvelappitg.utlitites.Constant;
 import com.example.marvelappitg.utlitites.DataEnum;
 import com.example.marvelappitg.utlitites.HelpMe;
 import com.example.marvelappitg.views.fragment.ImageFragment;
@@ -36,10 +37,21 @@ public class ShowImageActivity extends AppCompatActivity implements HandleRetrof
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_image);
         ButterKnife.bind(this);
+
+
+        initialize();
+
+
+
+
+
+    }
+
+    private void initialize() {
         characterImagesAdapter = new CharacterImagesAdapter(getSupportFragmentManager());
 
-        String url = getIntent().getStringExtra("url");
-        String type = getIntent().getStringExtra("type");
+        String url = getIntent().getStringExtra(Constant.url);
+        String type = getIntent().getStringExtra(Constant.type);
         if (type.equals(DataEnum.CallComicsDetails.name())) {
             CallImageList(DataEnum.CallComicsDetails.name(), url);
         } else if (type.equals(DataEnum.CallseriesDetails.name())) {
@@ -51,13 +63,16 @@ public class ShowImageActivity extends AppCompatActivity implements HandleRetrof
         } else {
             CallImageList(DataEnum.CalleventDetails.name(), url);
         }
-
-
     }
 
+
+
+
+    //region Call API
+
     private void CallImageList(String type, String url) {
-        Long tsLong = System.currentTimeMillis() / 1000;
-        String ts = tsLong.toString();
+        long tsLong = System.currentTimeMillis() / 1000;
+        String ts = Long.toString(tsLong);
         HashMap<String, String> meMap = new HashMap<>();
         meMap.put("apikey", "f2d587b7acc1cf9ae8d86fdcde51f394");
         meMap.put("ts", ts);
@@ -66,6 +81,11 @@ public class ShowImageActivity extends AppCompatActivity implements HandleRetrof
 
     }
 
+    //endregion
+
+
+
+    //region call response
 
     @Override
     public void onResponseSuccess(String flag, Object o) {
@@ -79,7 +99,6 @@ public class ShowImageActivity extends AppCompatActivity implements HandleRetrof
                 ImageFragment imageFragment = ImageFragment.getInstance(url);
                 characterImagesAdapter.addFragment(imageFragment);
             }
-
             pager.setAdapter(characterImagesAdapter);
             characterImagesAdapter.notifyDataSetChanged();
         } else if (flag.equals(DataEnum.CallseriesDetails.name())) {
@@ -111,6 +130,12 @@ public class ShowImageActivity extends AppCompatActivity implements HandleRetrof
     public void onNoContent(String flag, int code) {
 
     }
+
+
+    //endregion
+
+
+
 
     @OnClick(R.id.closebtn)
     public void onViewClicked() {
